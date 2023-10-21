@@ -1,0 +1,34 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyCosts.Api", "MyCosts.Api\MyCosts.Api.csproj", "{032E7284-4856-48AF-9696-0FE87065ADA7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyCosts.Postgres", "MyCosts.Postgres\MyCosts.Postgres.csproj", "{6411B10F-1005-434E-9A7A-F9E6C6D29D0E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyCosts.Domain", "MyCosts.Domain\MyCosts.Domain.csproj", "{2218A635-C965-46C4-92AC-B9DD1F6F99B8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyCosts.Application", "MyCosts.Application\MyCosts.Application.csproj", "{A986ECAE-1395-41ED-9035-904A0DB05875}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{032E7284-4856-48AF-9696-0FE87065ADA7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{032E7284-4856-48AF-9696-0FE87065ADA7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{032E7284-4856-48AF-9696-0FE87065ADA7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{032E7284-4856-48AF-9696-0FE87065ADA7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6411B10F-1005-434E-9A7A-F9E6C6D29D0E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6411B10F-1005-434E-9A7A-F9E6C6D29D0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6411B10F-1005-434E-9A7A-F9E6C6D29D0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6411B10F-1005-434E-9A7A-F9E6C6D29D0E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2218A635-C965-46C4-92AC-B9DD1F6F99B8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2218A635-C965-46C4-92AC-B9DD1F6F99B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2218A635-C965-46C4-92AC-B9DD1F6F99B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2218A635-C965-46C4-92AC-B9DD1F6F99B8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A986ECAE-1395-41ED-9035-904A0DB05875}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A986ECAE-1395-41ED-9035-904A0DB05875}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A986ECAE-1395-41ED-9035-904A0DB05875}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A986ECAE-1395-41ED-9035-904A0DB05875}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
