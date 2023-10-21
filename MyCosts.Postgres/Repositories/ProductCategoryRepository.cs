@@ -39,6 +39,7 @@ public class ProductCategoryRepository : IProductCategoryRepository
     public async Task<ICollection<ProductCategory>> GetAsync(ProductCategoryFilter filter, int? requesterUserId, CancellationToken cancellationToken = default)
     {
         var categories = await _postgresContext.ProductCategories
+            .Include(c => c.Products)
             .Where(c =>
                 (!requesterUserId.HasValue || c.UserId == requesterUserId.Value) &&
                 (string.IsNullOrWhiteSpace(filter.Name) || c.Name.Contains(filter.Name))

@@ -16,5 +16,6 @@ public static class ProductCategoryMapping
     {
         Id = productCategory.Id,
         Name = productCategory.Name,
+        Products = productCategory.Products.Select(p => p.ToViewModel()).ToArray(),
     };
 }
