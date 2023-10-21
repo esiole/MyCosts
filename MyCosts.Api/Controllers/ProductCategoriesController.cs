@@ -45,7 +45,7 @@ public class ProductCategoriesController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> GetAsync([FromRoute] ProductCategoryFilter filter, CancellationToken cancellationToken = default)
+    public async Task<IActionResult> GetAsync([FromQuery] ProductCategoryFilter filter, CancellationToken cancellationToken = default)
     {
         var categories = await _productCategoryService.GetAsync(filter, HttpContext.GetUser(), cancellationToken);
         return Ok(categories.Select(c => c.ToViewModel()));
