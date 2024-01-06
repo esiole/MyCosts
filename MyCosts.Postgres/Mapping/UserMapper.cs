@@ -1,18 +1,19 @@
 ﻿using MyCosts.Domain.Models;
 using MyCosts.Postgres.Entities;
+using MyCosts.Postgres.Mapping.Abstractions;
 
 namespace MyCosts.Postgres.Mapping;
 
-public static class UserMapper
+internal class UserMapper : IEntityMapper<UserEntity, User>
 {
-    public static UserEntity ToEntity(this User domainModel) => new()
+    public UserEntity MapToEntity(User domainModel) => new()
     {
         Id = domainModel.Id,
         Email = domainModel.Email,
         Password = domainModel.Password,
     };
 
-    public static User ToDomainModel(this UserEntity entity) => new()
+    public User MapToDomainModel(UserEntity entity) => new()
     {
         Id = entity.Id,
         Email = entity.Email,
