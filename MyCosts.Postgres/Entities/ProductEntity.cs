@@ -1,6 +1,8 @@
-﻿namespace MyCosts.Postgres.Entities;
+﻿using MyCosts.Postgres.Entities.Abstractions;
 
-public class ProductEntity
+namespace MyCosts.Postgres.Entities;
+
+public class ProductEntity : IPostgresEntity
 {
     public int Id { get; set; }
 

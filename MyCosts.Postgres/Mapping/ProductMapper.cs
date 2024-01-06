@@ -1,18 +1,19 @@
 ﻿using MyCosts.Domain.Models;
 using MyCosts.Postgres.Entities;
+using MyCosts.Postgres.Mapping.Abstractions;
 
 namespace MyCosts.Postgres.Mapping;
 
-public static class ProductMapper
+internal class ProductMapper : IEntityMapper<ProductEntity, Product>
 {
-    public static ProductEntity ToEntity(this Product domainModel) => new()
+    public ProductEntity MapToEntity(Product domainModel) => new()
     {
         Id = domainModel.Id,
         Name = domainModel.Name,
         CategoryId = domainModel.CategoryId,
     };
 
-    public static Product ToDomainModel(this ProductEntity entity) => new()
+    public Product MapToDomainModel(ProductEntity entity) => new()
     {
         Id = entity.Id,
         Name = entity.Name,

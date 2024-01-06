@@ -12,5 +12,6 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddMyCostsPostgresContext(this IServiceCollection serviceCollection, string connection) =>
         serviceCollection
             .AddDbContext<PostgresContext>(optionsBuilder => optionsBuilder.UseNpgsql(connection))
-            .AddSingleton<IEntityMapper<ProductCategoryEntity, ProductCategory>, ProductCategoryMapper>();
+            .AddSingleton<IEntityMapper<ProductCategoryEntity, ProductCategory>, ProductCategoryMapper>()
+            .AddSingleton<IEntityMapper<ProductEntity, Product>, ProductMapper>();
 }
