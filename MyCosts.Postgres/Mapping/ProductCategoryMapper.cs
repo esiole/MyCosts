@@ -1,11 +1,12 @@
 ﻿using MyCosts.Domain.Models;
 using MyCosts.Postgres.Entities;
+using MyCosts.Postgres.Mapping.Abstractions;
 
 namespace MyCosts.Postgres.Mapping;
 
-public static class ProductCategoryMapper
+public class ProductCategoryMapper : IEntityMapper<ProductCategoryEntity, ProductCategory>
 {
-    public static ProductCategoryEntity ToEntity(this ProductCategory domainModel) => new()
+    public ProductCategoryEntity MapToEntity(ProductCategory domainModel) => new()
     {
         Id = domainModel.Id,
         Name = domainModel.Name,
@@ -13,7 +14,7 @@ public static class ProductCategoryMapper
         Products = domainModel.Products.Select(p => p.ToEntity()).ToList(),
     };
 
-    public static ProductCategory ToDomainModel(this ProductCategoryEntity entity) => new()
+    public ProductCategory MapToDomainModel(ProductCategoryEntity entity) => new()
     {
         Id = entity.Id,
         Name = entity.Name,
