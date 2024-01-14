@@ -11,7 +11,15 @@ public static class ReceiptMapper
         Date = domainModel.Date,
         PlaceName = domainModel.PlaceName,
         UserId = domainModel.UserId,
-        Costs = domainModel.Costs.Select(c => c.ToEntity()).ToList(),
+        Costs = domainModel.Costs.Select(c => new CostEntity
+        {
+            Id = c.Id,
+            Amount = c.Amount,
+            Count = c.Count,
+            Weight = c.Weight,
+            ProductId = c.ProductId,
+            ReceiptId = domainModel.Id,
+        }).ToArray(),
     };
 
     public static Receipt ToDomainModel(this ReceiptEntity entity) => new()
@@ -20,6 +28,13 @@ public static class ReceiptMapper
         Date = entity.Date,
         PlaceName = entity.PlaceName,
         UserId = entity.UserId,
-        Costs = entity.Costs.Select(c => c.ToDomainModel()).ToList(),
+        Costs = entity.Costs.Select(c => new Cost
+        {
+            Id = c.Id,
+            Amount = c.Amount,
+            Count = c.Count,
+            Weight = c.Weight,
+            ProductId = c.ProductId,
+        }).ToArray(),
     };
 }
