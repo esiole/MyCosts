@@ -10,7 +10,7 @@ public static class CostMapping
         Id = id,
         Amount = model.Amount,
         Count = model.Count,
-        WeightInKg = model.WeightInKg,
+        Weight = model.Weight,
         ProductId = model.ProductId,
     };
 
@@ -19,7 +19,7 @@ public static class CostMapping
         Id = cost.Id,
         Amount = cost.Amount,
         Count = cost.Count,
-        WeightInKg = cost.WeightInKg,
+        Weight = cost.Weight,
         ProductId = cost.ProductId,
     };
 }

@@ -10,7 +10,7 @@ public static class CostMapper
         Id = domainModel.Id,
         Amount = domainModel.Amount,
         Count = domainModel.Count,
-        WeightInKg = domainModel.WeightInKg,
+        Weight = domainModel.Weight,
         ProductId = domainModel.ProductId,
     };
 
@@ -19,7 +19,7 @@ public static class CostMapper
         Id = entity.Id,
         Amount = entity.Amount,
         Count = entity.Count,
-        WeightInKg = entity.WeightInKg,
+        Weight = entity.Weight,
         ProductId = entity.ProductId,
     };
 }

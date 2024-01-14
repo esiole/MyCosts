@@ -6,7 +6,7 @@ public class Cost
 
     public required decimal Amount { get; set; }
     public int Count { get; set; } = 1;
-    public double? WeightInKg { get; set; }
+    public double? Weight { get; set; }
 
     public required int ProductId { get; set; }
     public Product? Product { get; set; }
