@@ -2,5 +2,5 @@
 
 public interface IPostgresEntity
 {
-    int Id { get; }
+    int Id { get; set; }
 }
