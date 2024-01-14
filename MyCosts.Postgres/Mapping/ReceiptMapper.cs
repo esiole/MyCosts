@@ -1,11 +1,12 @@
 ﻿using MyCosts.Domain.Models;
 using MyCosts.Postgres.Entities;
+using MyCosts.Postgres.Mapping.Abstractions;
 
 namespace MyCosts.Postgres.Mapping;
 
-public static class ReceiptMapper
+internal class ReceiptMapper : IEntityMapper<ReceiptEntity, Receipt>
 {
-    public static ReceiptEntity ToEntity(this Receipt domainModel) => new()
+    public ReceiptEntity MapToEntity(Receipt domainModel) => new()
     {
         Id = domainModel.Id,
         Date = domainModel.Date,
@@ -22,7 +23,7 @@ public static class ReceiptMapper
         }).ToArray(),
     };
 
-    public static Receipt ToDomainModel(this ReceiptEntity entity) => new()
+    public Receipt MapToDomainModel(ReceiptEntity entity) => new()
     {
         Id = entity.Id,
         Date = entity.Date,

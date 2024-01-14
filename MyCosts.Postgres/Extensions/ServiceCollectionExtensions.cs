@@ -14,5 +14,6 @@ public static class ServiceCollectionExtensions
             .AddDbContext<PostgresContext>(optionsBuilder => optionsBuilder.UseNpgsql(connection))
             .AddSingleton<IEntityMapper<ProductCategoryEntity, ProductCategory>, ProductCategoryMapper>()
             .AddSingleton<IEntityMapper<ProductEntity, Product>, ProductMapper>()
-            .AddSingleton<IEntityMapper<UserEntity, User>, UserMapper>();
+            .AddSingleton<IEntityMapper<UserEntity, User>, UserMapper>()
+            .AddSingleton<IEntityMapper<ReceiptEntity, Receipt>, ReceiptMapper>();
 }

@@ -19,11 +19,13 @@ public static class ServiceCollectionExtensions
         serviceCollection
             .AddTransient<IUserService, UserService>()
             .AddTransient<IProductCategoryService, ProductCategoryService>()
-            .AddTransient<IProductService, ProductService>();
+            .AddTransient<IProductService, ProductService>()
+            .AddTransient<IReceiptService, ReceiptService>();
 
     private static IServiceCollection AddMyCostsRepositories(this IServiceCollection serviceCollection) =>
         serviceCollection
             .AddScoped<IUserRepository, UserRepository>()
             .AddScoped<IProductCategoryRepository, ProductCategoryRepository>()
-            .AddScoped<IProductRepository, ProductRepository>();
+            .AddScoped<IProductRepository, ProductRepository>()
+            .AddScoped<IReceiptRepository, ReceiptRepository>();
 }
