@@ -1,6 +1,6 @@
 ﻿namespace MyCosts.Api.Models.Cost;
 
-public class CostEditModel
+public class CostModel
 {
     public decimal Amount { get; init; }
     public int Count { get; set; }
