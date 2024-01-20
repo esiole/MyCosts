@@ -11,5 +11,5 @@ public class ProductCategoryEntity : IPostgresEntity
     public required int UserId { get; set; }
     public UserEntity? User { get; set; }
 
-    public ICollection<ProductEntity> Products { get; set; } = new List<ProductEntity>();
+    public ICollection<ProductEntity> Products { get; set; } = [];
 }

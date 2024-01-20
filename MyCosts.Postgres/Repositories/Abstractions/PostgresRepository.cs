@@ -5,34 +5,27 @@ using MyCosts.Postgres.Mapping.Abstractions;
 
 namespace MyCosts.Postgres.Repositories.Abstractions;
 
-public abstract class PostgresRepository<TEntity, TDomainModel>
+public abstract class PostgresRepository<TEntity, TDomainModel>(PostgresContext postgresContext, IEntityMapper<TEntity, TDomainModel> mapper)
     where TEntity : class, IPostgresEntity
     where TDomainModel : class
 {
-    private readonly PostgresContext _postgresContext;
-    protected readonly IEntityMapper<TEntity, TDomainModel> Mapper;
+    protected readonly IEntityMapper<TEntity, TDomainModel> Mapper = mapper;
 
-    protected DbSet<TEntity> EntitySet => _postgresContext.Set<TEntity>();
+    protected DbSet<TEntity> EntitySet => postgresContext.Set<TEntity>();
     protected virtual string[]? HardLinkedCollections => null;
     protected virtual string[]? UpdatedCollections => null;
-
-    protected PostgresRepository(PostgresContext postgresContext, IEntityMapper<TEntity, TDomainModel> mapper)
-    {
-        _postgresContext = postgresContext;
-        Mapper = mapper;
-    }
 
     public async Task<TDomainModel> AddAsync(TDomainModel domainModel)
     {
         var entity = Mapper.MapToEntity(domainModel);
         EntitySet.Add(entity);
-        await _postgresContext.SaveChangesAsync();
+        await postgresContext.SaveChangesAsync();
         return Mapper.MapToDomainModel(entity);
     }
 
     public async Task DeleteAsync(int id)
     {
-        await _postgresContext.Set<TEntity>().Where(e => e.Id == id).ExecuteDeleteAsync();
+        await postgresContext.Set<TEntity>().Where(e => e.Id == id).ExecuteDeleteAsync();
     }
 
     public virtual async Task<TDomainModel?> UpdateAsync(TDomainModel domainModel)
@@ -42,7 +35,7 @@ public abstract class PostgresRepository<TEntity, TDomainModel>
         var entity = await EntitySet.FindAsync(updatedEntity.Id);
         if (entity == null) return null;
 
-        var entityEntry = _postgresContext.Entry(entity);
+        var entityEntry = postgresContext.Entry(entity);
 
         entityEntry.CurrentValues.SetValues(updatedEntity);
 
@@ -62,7 +55,7 @@ public abstract class PostgresRepository<TEntity, TDomainModel>
             }
         }
 
-        await _postgresContext.SaveChangesAsync();
+        await postgresContext.SaveChangesAsync();
 
         return Mapper.MapToDomainModel(entity);
     }
@@ -87,7 +80,7 @@ public abstract class PostgresRepository<TEntity, TDomainModel>
             }
             else
             {
-                _postgresContext.Entry(persistentItem).CurrentValues.SetValues(updatedItem);
+                postgresContext.Entry(persistentItem).CurrentValues.SetValues(updatedItem);
                 persistentItemDict.Remove(updatedItem.Id);
             }
         }
@@ -110,7 +103,7 @@ public abstract class PostgresRepository<TEntity, TDomainModel>
         foreach (var (persistentItem, updatedItem) in persistentItems.Zip(updatedItems))
         {
             updatedItem.Id = persistentItem.Id;
-            _postgresContext.Entry(persistentItem).CurrentValues.SetValues(updatedItem);
+            postgresContext.Entry(persistentItem).CurrentValues.SetValues(updatedItem);
         }
 
         foreach (var newItem in updatedItems.Skip(persistentItems.Length))

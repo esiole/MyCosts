@@ -9,19 +9,16 @@ namespace MyCosts.Postgres.Repositories;
 
 public class ReceiptRepository : PostgresRepository<ReceiptEntity, Receipt>, IReceiptRepository
 {
-    private readonly PostgresContext _postgresContext;
-
-    protected override string[] HardLinkedCollections => new[] { nameof(ReceiptEntity.Costs) };
+    protected override string[] HardLinkedCollections => [nameof(ReceiptEntity.Costs)];
 
     public ReceiptRepository(PostgresContext postgresContext, IEntityMapper<ReceiptEntity, Receipt> mapper)
         : base(postgresContext, mapper)
     {
-        _postgresContext = postgresContext;
     }
 
     public async Task<Receipt?> GetAsync(int receiptId, int? requesterUserId, CancellationToken cancellationToken = default)
     {
-        var receipt = await _postgresContext.Receipts
+        var receipt = await EntitySet
             .Include(r => r.Costs)
             .FirstOrDefaultAsync(r =>
                     (!requesterUserId.HasValue || r.UserId == requesterUserId.Value) &&
@@ -33,7 +30,7 @@ public class ReceiptRepository : PostgresRepository<ReceiptEntity, Receipt>, IRe
 
     public async Task<ICollection<Receipt>> GetAsync(int? requesterUserId, CancellationToken cancellationToken = default)
     {
-        var receipts = await _postgresContext.Receipts
+        var receipts = await EntitySet
             .Include(r => r.Costs)
             .Where(r => !requesterUserId.HasValue || r.UserId == requesterUserId.Value)
             .ToListAsync(cancellationToken);

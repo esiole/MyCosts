@@ -13,39 +13,32 @@ public interface IProductCategoryService
     Task<ICollection<ProductCategory>> GetAsync(ProductCategoryFilter filter, User requester, CancellationToken cancellationToken = default);
 }
 
-public class ProductCategoryService : IProductCategoryService
+public class ProductCategoryService(IProductCategoryRepository productCategoryRepository) : IProductCategoryService
 {
-    private readonly IProductCategoryRepository _productCategoryRepository;
-
-    public ProductCategoryService(IProductCategoryRepository productCategoryRepository)
-    {
-        _productCategoryRepository = productCategoryRepository;
-    }
-
     public async Task<ProductCategory> AddAsync(ProductCategory category) =>
-        await _productCategoryRepository.AddAsync(category);
+        await productCategoryRepository.AddAsync(category);
 
     public async Task<ProductCategory?> DeleteAsync(int categoryId, User deleter)
     {
-        var category = await _productCategoryRepository.GetAsync(categoryId, deleter.Id);
+        var category = await productCategoryRepository.GetAsync(categoryId, deleter.Id);
         if (category == null) return null;
 
-        await _productCategoryRepository.DeleteAsync(categoryId);
+        await productCategoryRepository.DeleteAsync(categoryId);
         return category;
     }
 
     public async Task<ProductCategory?> EditAsync(ProductCategory category, User editor)
     {
-        var origin = await _productCategoryRepository.GetAsync(category.Id, editor.Id);
+        var origin = await productCategoryRepository.GetAsync(category.Id, editor.Id);
         if (origin == null) return null;
 
-        await _productCategoryRepository.UpdateAsync(category);
+        await productCategoryRepository.UpdateAsync(category);
         return category;
     }
 
     public async Task<ProductCategory?> GetAsync(int categoryId, User requester, CancellationToken cancellationToken = default) =>
-        await _productCategoryRepository.GetAsync(categoryId, requester.Id, cancellationToken);
+        await productCategoryRepository.GetAsync(categoryId, requester.Id, cancellationToken);
 
     public async Task<ICollection<ProductCategory>> GetAsync(ProductCategoryFilter filter, User requester, CancellationToken cancellationToken = default) =>
-        await _productCategoryRepository.GetAsync(filter, requester.Id, cancellationToken);
+        await productCategoryRepository.GetAsync(filter, requester.Id, cancellationToken);
 }

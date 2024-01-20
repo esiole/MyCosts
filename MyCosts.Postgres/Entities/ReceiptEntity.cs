@@ -12,5 +12,5 @@ public class ReceiptEntity : IPostgresEntity
     public required int UserId { get; set; }
     public UserEntity? User { get; set; }
 
-    public ICollection<CostEntity> Costs { get; set; } = new List<CostEntity>();
+    public ICollection<CostEntity> Costs { get; set; } = [];
 }

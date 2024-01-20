@@ -12,19 +12,12 @@ namespace MyCosts.Api.Controllers;
 [Route("api/v1/[controller]")]
 [Authorize]
 [ServiceFilter(typeof(UserFilter))]
-public class ProductsController : ControllerBase
+public class ProductsController(IProductService productService) : ControllerBase
 {
-    private readonly IProductService _productService;
-
-    public ProductsController(IProductService productService)
-    {
-        _productService = productService;
-    }
-
     [HttpPost]
     public async Task<IActionResult> AddAsync([FromBody] ProductEditModel body)
     {
-        var createdProduct = await _productService.AddAsync(body.ToProduct());
+        var createdProduct = await productService.AddAsync(body.ToProduct());
         return CreatedAtAction("Get", new { createdProduct.Id }, createdProduct.ToViewModel());
     }
 
@@ -32,28 +25,28 @@ public class ProductsController : ControllerBase
     public async Task<IActionResult> EditAsync([FromRoute] int id, [FromBody] ProductEditModel body)
     {
         var editor = HttpContext.GetUser();
-        var editableProduct = await _productService.EditAsync(body.ToProduct(id), editor);
+        var editableProduct = await productService.EditAsync(body.ToProduct(id), editor);
         return editableProduct == null ? NotFound() : Ok();
     }
 
     [HttpDelete("{id:int}")]
     public async Task<IActionResult> DeleteAsync([FromRoute] int id)
     {
-        var removedProduct = await _productService.DeleteAsync(id, HttpContext.GetUser());
+        var removedProduct = await productService.DeleteAsync(id, HttpContext.GetUser());
         return removedProduct == null ? NotFound() : Ok();
     }
 
     [HttpGet]
     public async Task<IActionResult> GetAsync(CancellationToken cancellationToken = default)
     {
-        var products = await _productService.GetAsync(HttpContext.GetUser(), cancellationToken);
+        var products = await productService.GetAsync(HttpContext.GetUser(), cancellationToken);
         return Ok(products.Select(p => p.ToViewModel()));
     }
 
     [HttpGet("{id:int}")]
     public async Task<IActionResult> GetAsync([FromRoute] int id, CancellationToken cancellationToken = default)
     {
-        var product = await _productService.GetAsync(id, HttpContext.GetUser(), cancellationToken);
+        var product = await productService.GetAsync(id, HttpContext.GetUser(), cancellationToken);
         return product == null ? NotFound() : Ok(product.ToViewModel());
     }
 }

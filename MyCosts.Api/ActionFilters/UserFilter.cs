@@ -5,19 +5,12 @@ using MyCosts.Application.Services;
 
 namespace MyCosts.Api.ActionFilters;
 
-public class UserFilter : IAsyncActionFilter
+public class UserFilter(IUserService userService) : IAsyncActionFilter
 {
-    private readonly IUserService _userService;
-
-    public UserFilter(IUserService userService)
-    {
-        _userService = userService;
-    }
-
     public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
     {
         var userId = context.HttpContext.User.GetUserId();
-        var user = await _userService.GetAsync(userId);
+        var user = await userService.GetAsync(userId);
 
         if (user != null)
         {

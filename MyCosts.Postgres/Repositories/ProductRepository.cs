@@ -9,17 +9,14 @@ namespace MyCosts.Postgres.Repositories;
 
 public class ProductRepository : PostgresRepository<ProductEntity, Product>, IProductRepository
 {
-    private readonly PostgresContext _postgresContext;
-
     public ProductRepository(PostgresContext postgresContext, IEntityMapper<ProductEntity, Product> mapper)
         : base(postgresContext, mapper)
     {
-        _postgresContext = postgresContext;
     }
 
     public async Task<Product?> GetAsync(int productId, int? requesterUserId, CancellationToken cancellationToken = default)
     {
-        var product = await _postgresContext.Products
+        var product = await EntitySet
             .FirstOrDefaultAsync(p =>
                     (!requesterUserId.HasValue || p.Category!.UserId == requesterUserId.Value) &&
                     productId == p.Id,
@@ -30,7 +27,7 @@ public class ProductRepository : PostgresRepository<ProductEntity, Product>, IPr
 
     public async Task<ICollection<Product>> GetAsync(int? requesterUserId, CancellationToken cancellationToken = default)
     {
-        var products = await _postgresContext.Products
+        var products = await EntitySet
             .Where(p => !requesterUserId.HasValue || p.Category!.UserId == requesterUserId.Value)
             .ToListAsync(cancellationToken);
 

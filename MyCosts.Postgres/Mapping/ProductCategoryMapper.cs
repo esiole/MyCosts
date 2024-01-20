@@ -4,21 +4,15 @@ using MyCosts.Postgres.Mapping.Abstractions;
 
 namespace MyCosts.Postgres.Mapping;
 
-internal class ProductCategoryMapper : IEntityMapper<ProductCategoryEntity, ProductCategory>
+internal class ProductCategoryMapper(IEntityMapper<ProductEntity, Product> productMapper) 
+    : IEntityMapper<ProductCategoryEntity, ProductCategory>
 {
-    private readonly IEntityMapper<ProductEntity, Product> _productMapper;
-
-    public ProductCategoryMapper(IEntityMapper<ProductEntity, Product> productMapper)
-    {
-        _productMapper = productMapper;
-    }
-
     public ProductCategoryEntity MapToEntity(ProductCategory domainModel) => new()
     {
         Id = domainModel.Id,
         Name = domainModel.Name,
         UserId = domainModel.UserId,
-        Products = domainModel.Products.Select(_productMapper.MapToEntity).ToList(),
+        Products = domainModel.Products.Select(productMapper.MapToEntity).ToList(),
     };
 
     public ProductCategory MapToDomainModel(ProductCategoryEntity entity) => new()
@@ -26,6 +20,6 @@ internal class ProductCategoryMapper : IEntityMapper<ProductCategoryEntity, Prod
         Id = entity.Id,
         Name = entity.Name,
         UserId = entity.UserId,
-        Products = entity.Products.Select(_productMapper.MapToDomainModel).ToList(),
+        Products = entity.Products.Select(productMapper.MapToDomainModel).ToList(),
     };
 }

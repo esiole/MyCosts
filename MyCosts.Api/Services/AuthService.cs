@@ -16,32 +16,23 @@ public interface IAuthService
     Task<string> SignUpAsync(LoginModel loginModel);
 }
 
-public class AuthService : IAuthService
+public class AuthService(JwtOptions jwtOptions, IUserService userService) : IAuthService
 {
-    private readonly JwtOptions _jwtOptions;
-    private readonly IUserService _userService;
-
-    public AuthService(JwtOptions jwtOptions, IUserService userService)
-    {
-        _jwtOptions = jwtOptions;
-        _userService = userService;
-    }
-
     public async Task<string?> SignInAsync(LoginModel loginModel)
     {
-        var user = await _userService.GetAsync(loginModel.Email, loginModel.Password);
+        var user = await userService.GetAsync(loginModel.Email, loginModel.Password);
         return user == null ? null : CreateJwtToken(user);
     }
 
     public async Task<string> SignUpAsync(LoginModel loginModel)
     {
-        var user = await _userService.AddAsync(loginModel.ToNewUser());
+        var user = await userService.AddAsync(loginModel.ToNewUser());
         return CreateJwtToken(user);
     }
 
     private string CreateJwtToken(User user)
     {
-        var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtOptions.Key));
+        var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.Key));
         var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
         var claims = new[]
@@ -50,10 +41,10 @@ public class AuthService : IAuthService
         };
 
         var securityToken = new JwtSecurityToken(
-            _jwtOptions.Issuer,
-            _jwtOptions.Audience,
+            jwtOptions.Issuer,
+            jwtOptions.Audience,
             claims,
-            expires: DateTime.Now.AddDays(_jwtOptions.ValidForDays),
+            expires: DateTime.Now.AddDays(jwtOptions.ValidForDays),
             signingCredentials: credentials);
 
         var jwtToken = new JwtSecurityTokenHandler().WriteToken(securityToken);
