@@ -12,7 +12,7 @@ public class ProductViewModel
     public int Id { get; init; }
 
     /// <summary>
-    ///     Product category name
+    ///     Product name
     /// </summary>
     /// <example>Tomatoes</example>
     public required string Name { get; init; }
