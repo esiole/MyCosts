@@ -11,7 +11,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 var jwtOptions = builder.Configuration.GetRequiredSection("JwtOptions").Get<JwtOptions>()!;
 
-builder.Services.AddControllers();
+builder.Services
+    .AddControllers()
+    .ConfigureApiBehaviorOptions(options => { options.SuppressMapClientErrors = true; });
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(o =>
