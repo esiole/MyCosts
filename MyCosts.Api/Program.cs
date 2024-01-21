@@ -1,3 +1,4 @@
+using System.Reflection;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
@@ -16,9 +17,32 @@ builder.Services
     .ConfigureApiBehaviorOptions(options => { options.SuppressMapClientErrors = true; });
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(o =>
+builder.Services.AddSwaggerGen(options =>
 {
-    o.AddSecurityDefinition(SecureEndpointAuthRequirementFilter.SchemeName, new OpenApiSecurityScheme
+    options.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "MyCosts API",
+        Version = "v1",
+        Description = "MyCosts API documentation",
+        Contact = new OpenApiContact
+        {
+            Name = "Oleg Esikov",
+            Email = "esikov.oleg@mail.ru",
+            Url = new Uri("https://github.com/esiole"),
+        },
+        License = new OpenApiLicense
+        {
+            Name = "MIT License",
+            Url = new Uri("https://opensource.org/licenses/MIT"),
+        },
+    });
+
+    var xmlDocFileName = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlDocFileName));
+
+    options.SupportNonNullableReferenceTypes();
+
+    options.AddSecurityDefinition(SecureEndpointAuthRequirementFilter.SchemeName, new OpenApiSecurityScheme
     {
         Name = "Authorization",
         Type = SecuritySchemeType.Http,
@@ -27,7 +51,7 @@ builder.Services.AddSwaggerGen(o =>
         Description = "JWT Authorization header using the Bearer scheme. Enter your token in the text input below",
     });
 
-    o.OperationFilter<SecureEndpointAuthRequirementFilter>();
+    options.OperationFilter<SecureEndpointAuthRequirementFilter>();
 });
 
 builder.Services
