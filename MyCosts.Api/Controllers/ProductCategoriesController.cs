@@ -12,9 +12,11 @@ namespace MyCosts.Api.Controllers;
 /// <summary>
 ///     Product category management
 /// </summary>
+/// <response code="401">Unauthorized</response>
 [ApiController]
 [Route("api/v1/[controller]")]
 [Authorize]
+[ProducesResponseType(typeof(void), StatusCodes.Status401Unauthorized)]
 [ServiceFilter(typeof(UserFilter))]
 public class ProductCategoriesController(IProductCategoryService productCategoryService) : ControllerBase
 {
