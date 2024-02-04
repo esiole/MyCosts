@@ -14,6 +14,8 @@ builder.Services
     .AddControllers()
     .ConfigureApiBehaviorOptions(options => { options.SuppressMapClientErrors = true; });
 
+builder.Services.AddCors();
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(SwaggerGenBuilder.SetupSwaggerGen);
 
@@ -47,6 +49,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseCors(c => c.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 app.UseAuthorization();
 app.MapControllers();
 
