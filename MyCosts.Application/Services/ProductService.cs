@@ -1,4 +1,5 @@
-﻿using MyCosts.Domain.Models;
+﻿using MyCosts.Domain.Dto.Filters;
+using MyCosts.Domain.Models;
 using MyCosts.Domain.Services;
 
 namespace MyCosts.Application.Services;
@@ -9,7 +10,7 @@ public interface IProductService
     Task<Product?> DeleteAsync(int productId, User deleter);
     Task<Product?> EditAsync(Product product, User editor);
     Task<Product?> GetAsync(int productId, User requester, CancellationToken cancellationToken = default);
-    Task<ICollection<Product>> GetAsync(User requester, CancellationToken cancellationToken = default);
+    Task<ICollection<Product>> GetAsync(ProductFilter filter, User requester, CancellationToken cancellationToken = default);
 }
 
 public class ProductService(IProductRepository productRepository) : IProductService
@@ -37,6 +38,6 @@ public class ProductService(IProductRepository productRepository) : IProductServ
     public async Task<Product?> GetAsync(int productId, User requester, CancellationToken cancellationToken = default) =>
         await productRepository.GetAsync(productId, requester.Id, cancellationToken);
 
-    public async Task<ICollection<Product>> GetAsync(User requester, CancellationToken cancellationToken = default) =>
-        await productRepository.GetAsync(requester.Id, cancellationToken);
+    public async Task<ICollection<Product>> GetAsync(ProductFilter filter, User requester, CancellationToken cancellationToken = default) =>
+        await productRepository.GetAsync(filter, requester.Id, cancellationToken);
 }

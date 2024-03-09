@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using MyCosts.Domain.Dto.Filters;
 using MyCosts.Domain.Models;
 using MyCosts.Domain.Services;
 using MyCosts.Postgres.Entities;
@@ -25,10 +26,11 @@ public class ProductRepository : PostgresRepository<ProductEntity, Product>, IPr
         return product == null ? null : Mapper.MapToDomainModel(product);
     }
 
-    public async Task<ICollection<Product>> GetAsync(int? requesterUserId, CancellationToken cancellationToken = default)
+    public async Task<ICollection<Product>> GetAsync(ProductFilter filter, int? requesterUserId, CancellationToken cancellationToken = default)
     {
         var products = await EntitySet
             .Where(p => !requesterUserId.HasValue || p.Category!.UserId == requesterUserId.Value)
+            .Where(c => string.IsNullOrWhiteSpace(filter.Name) || c.Name.Contains(filter.Name))
             .ToListAsync(cancellationToken);
 
         return products.ConvertAll(Mapper.MapToDomainModel);

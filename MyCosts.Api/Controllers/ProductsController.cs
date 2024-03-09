@@ -5,6 +5,7 @@ using MyCosts.Api.Extensions;
 using MyCosts.Api.Mapping;
 using MyCosts.Api.Models.Product;
 using MyCosts.Application.Services;
+using MyCosts.Domain.Dto.Filters;
 
 namespace MyCosts.Api.Controllers;
 
@@ -71,9 +72,9 @@ public class ProductsController(IProductService productService) : ControllerBase
     /// <response code="200">Products data</response>
     [HttpGet]
     [ProducesResponseType(typeof(ProductViewModel[]), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetAsync(CancellationToken cancellationToken = default)
+    public async Task<IActionResult> GetAsync([FromQuery] ProductFilter filter, CancellationToken cancellationToken = default)
     {
-        var products = await productService.GetAsync(HttpContext.GetUser(), cancellationToken);
+        var products = await productService.GetAsync(filter, HttpContext.GetUser(), cancellationToken);
         return Ok(products.Select(p => p.ToViewModel()));
     }
 
