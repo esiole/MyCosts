@@ -1,0 +1,10 @@
+tests/
+bin/
+obj/
+
+.idea/
+.vs/
+
+Dockerfile
+.dockerignore
+.gitignore

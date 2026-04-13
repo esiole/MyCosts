@@ -1,0 +1,11 @@
+node_modules/
+dist/
+.prettierrc
+eslint.config.js
+
+.idea/
+.vscode/
+
+Dockerfile
+.dockerignore
+.gitignore
