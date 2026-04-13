@@ -9,7 +9,7 @@ public sealed class ReceiptLine
 
     public decimal TotalAmount => LinePricing.TotalAmount;
 
-    internal ReceiptLine(Guid id, Guid receiptId, Guid productId, LinePricing linePricing)
+    public ReceiptLine(Guid id, Guid receiptId, Guid productId, LinePricing linePricing)
     {
         Id = id;
         ReceiptId = receiptId;
