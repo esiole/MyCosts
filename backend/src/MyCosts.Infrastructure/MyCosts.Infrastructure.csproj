@@ -1,8 +1,12 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <ProjectReference Include="..\MyCosts.Application\MyCosts.Application.csproj"/>
-    <ProjectReference Include="..\MyCosts.Domain\MyCosts.Domain.csproj"/>
+    <PackageReference Include="EFCore.NamingConventions" />
+    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MyCosts.Domain\MyCosts.Domain.csproj" />
   </ItemGroup>
 
 </Project>

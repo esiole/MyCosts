@@ -9,6 +9,12 @@ public sealed class ReceiptLine
 
     public decimal TotalAmount => LinePricing.TotalAmount;
 
+    // Used by EF Core
+    private ReceiptLine()
+    {
+        LinePricing = null!;
+    }
+
     public ReceiptLine(Guid id, Guid receiptId, Guid productId, LinePricing linePricing)
     {
         Id = id;

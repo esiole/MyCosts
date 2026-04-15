@@ -4,26 +4,40 @@ Personal expense tracking application.
 
 ## Stack
 
-- **Backend:** .NET 10 Web API · Clean Architecture · EF Core · PostgreSQL
+- **Backend:** .NET 10 Web API · Vertical Slice Architecture · EF Core 10 · PostgreSQL
 - **Frontend:** React 19 · TypeScript · Vite · ESLint · Prettier
 
 ## Project Structure
 
 ```
 MyCosts/
-├── backend/                  # .NET solution (Clean Architecture)
+├── backend/
 │   ├── src/
-│   │   ├── MyCosts.Domain/
-│   │   ├── MyCosts.Application/
-│   │   ├── MyCosts.Infrastructure/
-│   │   └── MyCosts.Api/
+│   │   ├── MyCosts.Domain/          # Domain entities (pure, no dependencies)
+│   │   ├── MyCosts.Application/     # Feature handlers (VSA slices), references Infrastructure
+│   │   ├── MyCosts.Infrastructure/  # EF Core DbContext, PostgreSQL, migrations
+│   │   ├── MyCosts.Api/             # Minimal API endpoints
+│   │   └── MyCosts.Migrator/        # Standalone migration runner (runs before Api in Docker)
 │   └── tests/
 │       ├── MyCosts.UnitTests/
-│       └── MyCosts.IntegrationTests/
+│       └── MyCosts.IntegrationTests/  # TestContainers-based integration tests
 ├── frontend/                 # React + Vite + TypeScript
-├── docker-compose.yml        # Full stack
+├── docker-compose.yml        # Full stack (postgres → migrator → api → frontend)
 └── docker-compose.db.yml     # PostgreSQL only
 ```
+
+## Architecture
+
+**Vertical Slice Architecture** — each feature lives in its own slice under `Application/Features/{Domain}/{Feature}/`, containing the handler, request, and response in one place. Handlers inject `AppDbContext` directly (no repository layer).
+
+Dependency flow:
+```
+Api → Application → Infrastructure → Domain
+         ↑                ↑
+    (feature handlers)  (DbContext)
+```
+
+The `Migrator` project is a separate console app that applies EF Core migrations on startup and exits. In Docker Compose, the `api` service depends on `migrator` completing successfully.
 
 ## Local Development
 
@@ -35,9 +49,38 @@ MyCosts/
 # Start PostgreSQL
 docker compose -f docker-compose.db.yml up -d
 
-# Run API (listens on http://localhost:5050)
-cd backend && dotnet run --project src/MyCosts.Api
+# Apply migrations
+cd backend
+dotnet run --project src/MyCosts.Migrator
+
+# Run API
+dotnet run --project src/MyCosts.Api
+# → http://localhost:5050
 ```
+
+### Migrations
+
+```bash
+cd backend
+
+# Add a new migration
+dotnet ef migrations add <MigrationName> \
+  --project src/MyCosts.Infrastructure \
+  --startup-project src/MyCosts.Migrator \
+  --output-dir Persistence/Migrations
+
+# List applied migrations
+dotnet ef migrations list \
+  --project src/MyCosts.Infrastructure \
+  --startup-project src/MyCosts.Migrator
+
+# Remove last migration (if not yet applied)
+dotnet ef migrations remove \
+  --project src/MyCosts.Infrastructure \
+  --startup-project src/MyCosts.Migrator
+```
+
+> `dotnet-ef` is pinned as a local tool in `.config/dotnet-tools.json`. Run `dotnet tool restore` once after cloning.
 
 ### Frontend
 
@@ -47,7 +90,7 @@ npm install
 npm run dev   # http://localhost:5173
 ```
 
-> Vite automatically proxies `/api/*` requests to `http://localhost:5050` - no CORS required.
+> Vite automatically proxies `/api/*` requests to `http://localhost:5050` — no CORS required.
 
 ### Frontend scripts
 
@@ -71,8 +114,12 @@ docker compose up --build
 # → Postgres: localhost:5432
 ```
 
+Migrations run automatically via the `migrator` service before the API starts.
+
 ## Tests
 
 ```bash
 cd backend && dotnet test
 ```
+
+Integration tests use TestContainers (Docker required) — each test runs in a transaction that is rolled back on teardown.

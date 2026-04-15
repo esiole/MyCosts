@@ -4,6 +4,7 @@
     <Project Path="src/MyCosts.Application/MyCosts.Application.csproj"/>
     <Project Path="src/MyCosts.Domain/MyCosts.Domain.csproj"/>
     <Project Path="src/MyCosts.Infrastructure/MyCosts.Infrastructure.csproj"/>
+    <Project Path="src/MyCosts.Migrator/MyCosts.Migrator.csproj"/>
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/MyCosts.IntegrationTests/MyCosts.IntegrationTests.csproj"/>

@@ -31,6 +31,14 @@ public sealed class Receipt
         _lines = [..lines];
     }
 
+    // Used by EF Core
+    private Receipt()
+    {
+        Shop = null!;
+        CurrencyCode = null!;
+        _lines = null!;
+    }
+
     public ReceiptLine AddLine(Guid productId, LinePricing linePricing)
     {
         var line = new ReceiptLine(Guid.CreateVersion7(), Id, productId, linePricing);

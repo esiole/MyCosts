@@ -6,5 +6,6 @@ obj/
 .vs/
 
 Dockerfile
+migrator.dockerfile
 .dockerignore
 .gitignore
