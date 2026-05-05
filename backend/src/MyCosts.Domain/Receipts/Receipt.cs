@@ -28,7 +28,7 @@ public sealed class Receipt
         CreatedAt = createdAt;
         Shop = shop;
         CurrencyCode = currencyCode;
-        _lines = [..lines];
+        _lines = [.. lines];
     }
 
     // Used by EF Core

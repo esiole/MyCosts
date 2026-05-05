@@ -1,6 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Identity.Core" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\MyCosts.Domain\MyCosts.Domain.csproj"/>
     <ProjectReference Include="..\MyCosts.Infrastructure\MyCosts.Infrastructure.csproj"/>
   </ItemGroup>

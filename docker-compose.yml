@@ -36,6 +36,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - ConnectionStrings__DefaultConnection=Host=postgres;Database=mycosts;Username=postgres;Password=postgres
+      - Jwt__SecretKey=dev-only-secret-key-minimum-32-characters-long
     depends_on:
       postgres:
         condition: service_healthy

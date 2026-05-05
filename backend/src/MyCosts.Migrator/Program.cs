@@ -5,7 +5,7 @@ using MyCosts.Infrastructure;
 using MyCosts.Infrastructure.Persistence;
 
 var host = Host.CreateDefaultBuilder(args)
-    .ConfigureServices((ctx, services) => services.AddInfrastructure(ctx.Configuration))
+    .ConfigureServices((ctx, services) => services.AddPersistence(ctx.Configuration))
     .Build();
 
 await using var scope = host.Services.CreateAsyncScope();

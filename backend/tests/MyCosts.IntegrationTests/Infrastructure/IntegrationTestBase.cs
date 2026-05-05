@@ -7,8 +7,9 @@ namespace MyCosts.IntegrationTests.Infrastructure;
 [Collection("Database")]
 public abstract class IntegrationTestBase(DatabaseFixture fixture) : IAsyncLifetime
 {
-    protected AppDbContext DbContext { get; private set; } = null!;
     private IDbContextTransaction _transaction = null!;
+
+    protected AppDbContext DbContext { get; private set; } = null!;
 
     public async Task InitializeAsync()
     {
