@@ -20,7 +20,7 @@ services:
       context: ./backend
       dockerfile: migrator.dockerfile
     environment:
-      - ASPNETCORE_ENVIRONMENT=Production
+      - DOTNET_ENVIRONMENT=Production
       - ConnectionStrings__DefaultConnection=Host=postgres;Database=mycosts;Username=postgres;Password=postgres
     depends_on:
       postgres:
