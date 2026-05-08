@@ -5,8 +5,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MyCosts.Domain\MyCosts.Domain.csproj"/>
-    <ProjectReference Include="..\MyCosts.Infrastructure\MyCosts.Infrastructure.csproj"/>
+    <ProjectReference Include="..\MyCosts.Domain\MyCosts.Domain.csproj" />
+    <ProjectReference Include="..\MyCosts.Infrastructure\MyCosts.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -121,5 +121,8 @@ resharper_place_attribute_on_same_line = false
 [*.{json,yml,yaml,xml,csproj,props,targets,config,slnx}]
 indent_size = 2
 
+[*.csproj]
+ij_xml_space_inside_empty_tag = true
+
 [Makefile]
 indent_style = tab
