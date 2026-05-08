@@ -3,7 +3,6 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using MyCosts.Api.Authorization;
-using MyCosts.Application.Common;
 using MyCosts.Application.Features.Auth.LoginUser;
 using MyCosts.Application.Features.Auth.RegisterUser;
 using MyCosts.Domain.Users;
@@ -43,7 +42,7 @@ public static class AuthEndpoints
     {
         var result = await handler.HandleAsync(new RegisterUserCommand(req.Email, req.Password), ct);
 
-        return result.Match(_ => Results.Ok(), ToHttpResult);
+        return result.Match(_ => Results.Ok(), HttpResultMapper.ToHttpResult);
     }
 
     private static async Task<IResult> LoginAsync(
@@ -56,7 +55,7 @@ public static class AuthEndpoints
 
         if (!result.IsSuccess)
         {
-            return ToHttpResult(result.Error);
+            return HttpResultMapper.ToHttpResult(result.Error);
         }
 
         var user = result.Value;
@@ -89,23 +88,10 @@ public static class AuthEndpoints
 
         return result.Match(
             user => Results.Ok(new { token = tokenService.Generate(user) }),
-            ToHttpResult);
+            HttpResultMapper.ToHttpResult);
     }
 
     private static IResult MobileLogout() => Results.Ok();
-
-    private static IResult ToHttpResult(AppError error) => error.Kind switch
-    {
-        ErrorKind.Validation => Results.ValidationProblem(
-            error.ValidationErrors?.ToDictionary(kvp => kvp.Key, kvp => kvp.Value)
-            ?? new Dictionary<string, string[]> { [""] = [error.Message] }),
-        ErrorKind.NotFound => Results.Problem(title: error.Message, statusCode: StatusCodes.Status404NotFound),
-        ErrorKind.Conflict => Results.Problem(title: error.Message, statusCode: StatusCodes.Status409Conflict),
-        ErrorKind.Unauthorized => Results.Problem(
-            title: "Invalid credentials.",
-            statusCode: StatusCodes.Status401Unauthorized),
-        _ => Results.Problem(),
-    };
 }
 
 internal sealed record RegisterRequest(

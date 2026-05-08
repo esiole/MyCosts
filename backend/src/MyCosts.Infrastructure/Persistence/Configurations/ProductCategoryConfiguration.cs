@@ -15,7 +15,9 @@ internal sealed class ProductCategoryConfiguration : IEntityTypeConfiguration<Pr
         builder.Property(c => c.Id).ValueGeneratedNever();
 
         builder.Property(c => c.UserId).IsRequired();
-        builder.Property(c => c.Name).IsRequired().HasMaxLength(200);
+        builder.Property(c => c.Name).IsRequired().HasMaxLength(ProductCategoryConstraints.NameMaxLength);
+
+        builder.HasIndex(c => new { c.UserId, c.Name }).IsUnique();
 
         builder.HasOne<User>()
             .WithMany()

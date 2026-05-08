@@ -9,4 +9,8 @@
     <ProjectReference Include="..\MyCosts.Infrastructure\MyCosts.Infrastructure.csproj"/>
   </ItemGroup>
 
+  <ItemGroup>
+    <InternalsVisibleTo Include="MyCosts.UnitTests" />
+  </ItemGroup>
+
 </Project>

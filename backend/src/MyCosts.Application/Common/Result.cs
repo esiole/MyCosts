@@ -48,7 +48,50 @@ public sealed class Result<T>
     public static Result<T> Fail(ErrorKind kind, string message) =>
         new(new AppError(kind, message, null));
 
-    public static Result<T> ValidationFail(IEnumerable<ValidationResult> errors)
+    public static Result<T> ValidationFail(IEnumerable<ValidationResult> errors) =>
+        Fail(ResultHelper.BuildValidationError(errors));
+
+    public TOut Match<TOut>(Func<T, TOut> onSuccess, Func<AppError, TOut> onFailure)
+        => IsSuccess ? onSuccess(_value!) : onFailure(_error);
+}
+
+public sealed class Result
+{
+    private readonly AppError _error;
+
+    public bool IsSuccess { get; }
+
+    public AppError Error => !IsSuccess
+        ? _error
+        : throw new InvalidOperationException("Cannot access Error on a successful Result.");
+
+    private Result()
+    {
+        IsSuccess = true;
+    }
+
+    private Result(AppError error)
+    {
+        _error = error;
+        IsSuccess = false;
+    }
+
+    public static Result Ok() => new();
+    public static Result Fail(AppError error) => new(error);
+
+    public static Result Fail(ErrorKind kind, string message) =>
+        new(new AppError(kind, message, null));
+
+    public static Result ValidationFail(IEnumerable<ValidationResult> errors) =>
+        Fail(ResultHelper.BuildValidationError(errors));
+
+    public TOut Match<TOut>(Func<TOut> onSuccess, Func<AppError, TOut> onFailure)
+        => IsSuccess ? onSuccess() : onFailure(_error);
+}
+
+file static class ResultHelper
+{
+    public static AppError BuildValidationError(IEnumerable<ValidationResult> errors)
     {
         var dict = errors
             .SelectMany(e => e.MemberNames.Any()
@@ -57,9 +100,6 @@ public sealed class Result<T>
             .GroupBy(x => x.Field, x => x.Message)
             .ToDictionary(g => g.Key, g => g.ToArray());
 
-        return Fail(new AppError(ErrorKind.Validation, "One or more validation errors occurred.", dict));
+        return new AppError(ErrorKind.Validation, "One or more validation errors occurred.", dict);
     }
-
-    public TOut Match<TOut>(Func<T, TOut> onSuccess, Func<AppError, TOut> onFailure)
-        => IsSuccess ? onSuccess(_value!) : onFailure(_error);
 }
