@@ -10,13 +10,13 @@ public sealed class GetProductCategoriesHandler(AppDbContext db)
     public async Task<Page<ProductCategory, string>> HandleAsync(GetProductCategoriesQuery query, CancellationToken ct)
     {
         var cursor = CursorEncoder.Decode(query.Cursor);
-        var searchLower = query.Search?.Trim().ToLowerInvariant();
+        var search = query.Search?.Trim().ToLowerInvariant();
 
         var q = db.ProductCategories.Where(c => c.UserId == query.UserId);
 
-        if (!string.IsNullOrEmpty(searchLower))
+        if (!string.IsNullOrEmpty(search))
         {
-            q = q.Where(c => c.Name.ToLower().StartsWith(searchLower));
+            q = q.Where(c => c.Name.ToLower().StartsWith(search));
         }
 
         if (cursor is not null)

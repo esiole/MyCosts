@@ -90,6 +90,7 @@ app.UseAuthorization();
 
 app.MapGroup("/api/v1")
     .MapAuthEndpoints()
-    .MapProductCategoryEndpoints();
+    .MapProductCategoryEndpoints()
+    .MapProductEndpoints();
 
 await app.RunAsync();
